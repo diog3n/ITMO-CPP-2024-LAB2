@@ -66,10 +66,9 @@ int main(int argc, char **argv) {
 
     newline;
 
-    LinkedList<int> copy_constr(ll_int2);
-    LinkedList<int> move_constr(ll_int3);
 
     header(copy_constr);
+    LinkedList<int> copy_constr(ll_int2);
 
     for (int num : copy_constr) {
         print_val(num);
@@ -78,10 +77,13 @@ int main(int argc, char **argv) {
     newline;
 
     header(move_constr);
+    LinkedList<int> move_constr(std::move(ll_int3));
 
     for (int num : move_constr) {
         print_val(num);
     }
+
+    move_constr = std::move(ll_int2);
 
     newline;
 

@@ -9,7 +9,27 @@ inline void pr_begin__(const char *func) {
     std::cout << func << ": Executing!" << std::endl;
 }
 
-#define pr_begin pr_begin__(__func__)
+inline void pr_move__(const char *func) {
+    std::cout << func << ": Executing a move contructor!" << std::endl;
+}
+
+inline void pr_copy__(const char *func) {
+    std::cout << func << ": Executing a copy contructor!" << std::endl;
+}
+
+inline void pr_move_assign__(const char *func) {
+    std::cout << func << ": Executing a move assignment!" << std::endl;
+}
+
+inline void pr_copy_assign__(const char *func) {
+    std::cout << func << ": Executing a copy assignment!" << std::endl;
+}
+
+#define pr_begin       pr_begin__(__func__)
+#define pr_copy        pr_copy__(__func__)
+#define pr_move        pr_move__(__func__)
+#define pr_copy_assign pr_copy_assign__(__func__)
+#define pr_move_assign pr_move_assign__(__func__)
 
 namespace dio {
 

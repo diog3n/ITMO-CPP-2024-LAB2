@@ -1,3 +1,5 @@
+// This include statement is just a workaround to make clangd work at least somewhat
+// properly in .tpp files
 #ifndef __DIO_LINKED_LIST_HPP__
 #include "linked_list.hpp"
 #endif
@@ -6,7 +8,7 @@
 
 template<typename T>
 dio::LinkedList<T>::LinkedList(const LinkedList<T>& other): head_(nullptr), size_(0) {
-    pr_begin;
+    pr_copy;
 
     LinkedListNode<T> *node = other.GetPrev(); // returns the last one if no arguments given
 
@@ -24,12 +26,15 @@ dio::LinkedList<T>::LinkedList(const LinkedList<T>& other): head_(nullptr), size
 }
 
 template<typename T>
-dio::LinkedList<T>::LinkedList(LinkedList<T>&& other)
-        : head_(std::move(other.head_))
-        , size_(std::move(other.size_)) { pr_begin; }
+dio::LinkedList<T>::LinkedList(LinkedList<T>&& other) {
+    pr_move;
+    std::swap(head_, other.head_);
+    std::swap(size_, other.size_);
+}
 
 template<typename T>
 dio::LinkedList<T>& dio::LinkedList<T>::operator=(const dio::LinkedList<T>& other) {
+    pr_copy_assign;
     if (this == &other) return *this;
 
     LinkedList<T> new_list(other);
@@ -40,13 +45,11 @@ dio::LinkedList<T>& dio::LinkedList<T>::operator=(const dio::LinkedList<T>& othe
 
 template<typename T>
 dio::LinkedList<T>& dio::LinkedList<T>::operator=(dio::LinkedList<T>&& other) {
+    pr_move_assign;
     if (this == &other) return *this;
 
-    size_ = std::move(other.size_);
-    head_ = std::move(other.head_);
-
-    other.size_ = 0;
-    other.head_ = nullptr;
+    std::swap(size_, other.size_);
+    std::swap(head_, other.head_);
 
     return *this;
 }
@@ -159,15 +162,21 @@ dio::LinkedListNode<T> *dio::LinkedList<T>::GetPrev(const LinkedListNode<T> *nod
 // ======================= LinkedListNode =======================
 template<typename T>
 dio::LinkedListNode<T>::LinkedListNode(const LinkedListNode<T> &other)
-        : val_(other.val_), next_(nullptr) { pr_begin; }
+        : val_(other.val_), next_(nullptr) { pr_copy; }
 
 template<typename T>
-dio::LinkedListNode<T>::LinkedListNode(LinkedListNode<T>&& other)
-        : val_(std::move(other.val_)), next_(std::move(other.next_)) { pr_begin; }
+dio::LinkedListNode<T>::LinkedListNode(LinkedListNode<T>&& other) {
+    pr_move;
+
+    std::swap(other.next_, next_);
+    std::swap(other.val_,  val_);
+
+    return *this;
+}
 
 template<typename T>
 dio::LinkedListNode<T>& dio::LinkedListNode<T>::operator=(const LinkedListNode<T>& other) {
-    pr_begin;
+    pr_copy_assign;
 
     if (this == &other) return *this;
 
@@ -178,12 +187,13 @@ dio::LinkedListNode<T>& dio::LinkedListNode<T>::operator=(const LinkedListNode<T
 
 template<typename T>
 dio::LinkedListNode<T>& dio::LinkedListNode<T>::operator=(LinkedListNode<T>&& other) {
-    pr_begin;
+    pr_move_assign;
 
     if (this == &other) return *this;
 
-    val_  = std::move(other.val_);
-    next_ = std::move(other.next_);
+    std::swap(other.next_, next_);
+    std::swap(other.val_,  val_);
+
     return *this;
 }
 
