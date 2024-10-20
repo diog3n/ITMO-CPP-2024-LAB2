@@ -3,19 +3,40 @@
 
 #define print_val(__x) std::cout << #__x << " = " << __x << std::endl
 #define newline        std::cout << std::endl
-#define header(__x)    std::cout << #__x << std::endl
+#define header(__x)    std::cout << "========== " << #__x << " ==========" <<std::endl
+
+dio::LinkedList<int> FillLinkedList(int from, int to) {
+    dio::LinkedList<int> ll;
+    for (int i = from; i < to; i++) {
+        ll.Push(i);
+    }
+
+    return ll;
+}
+
+void FillLinkedListByReference(dio::LinkedList<int>& ll, int from, int to) {
+    for (int i = from; i < to; i++) {
+        ll.Push(i);
+    }
+}
+
+dio::LinkedList<int>& AllocateAndFill(int from, int to) {
+    dio::LinkedList<int> *llptr = new dio::LinkedList<int>();
+
+    for (int i = from; i < to; i++) {
+        llptr->Push(i);
+    }
+
+    return *llptr;
+}
 
 int main(int argc, char **argv) {
     using namespace dio;
 
-    LinkedList<int> ll_int;
+    header(fill linked list);
+    LinkedList<int> ll_int = FillLinkedList(1, 10);;
     LinkedList<int> ll_int2;
     LinkedList<int> ll_int3;
-
-    ll_int.Push(1);
-    ll_int.Push(2);
-    ll_int.Push(3);
-    ll_int.Push(4);
 
     header(ll_int);
 
@@ -25,9 +46,9 @@ int main(int argc, char **argv) {
 
     newline;
 
-    ll_int2 = ll_int;
 
-    header(ll_int2);
+    header(fill by reference);
+    FillLinkedListByReference(ll_int2, 1, 10);
 
     for (int num : ll_int2) {
         print_val(num);
@@ -63,6 +84,15 @@ int main(int argc, char **argv) {
     }
 
     newline;
+
+    header(allocated);
+    LinkedList<int>& allocated = AllocateAndFill(1, 10);
+
+    for (int num : allocated) {
+        print_val(num);
+    }
+
+    delete &allocated;
 
     return 0;
 }

@@ -25,8 +25,8 @@ dio::LinkedList<T>::LinkedList(const LinkedList<T>& other): head_(nullptr), size
 
 template<typename T>
 dio::LinkedList<T>::LinkedList(LinkedList<T>&& other)
-        : head_(std::move(other.head))
-        , size_(std::move(other.size)) { pr_begin; }
+        : head_(std::move(other.head_))
+        , size_(std::move(other.size_)) { pr_begin; }
 
 template<typename T>
 dio::LinkedList<T>& dio::LinkedList<T>::operator=(const dio::LinkedList<T>& other) {
